@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="pdfkit-page-size" content="a4"/>
+    <meta name="pdfkit-orientation" content="portrait"/>
+    <title>Title</title>
+    <style>
+        .table1 {
+            `font-family: sans-serif;
+            color: #444;
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #f2f5f7;
+        }
+
+        .table1 tr th{
+            background: #35A9DB;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        .table1, th, td {
+            padding: 8px 20px;
+            text-align: center;
+        }
+
+        .table1 tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .table1 tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h2>{{head_title}}</h2>
+    </div>
+    <div>
+        <table class="table1">
+            <thead>
+                <tr>
+                    {% for key, value in head_table.items() %}
+                    <th>{{value}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in body_table %}
+                <tr>
+                    {% for key, value in rec.items() %}
+                    <td>{{value}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

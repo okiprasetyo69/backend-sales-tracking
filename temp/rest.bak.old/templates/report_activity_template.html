@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="pdfkit-page-size" content="a4"/>
+    <meta name="pdfkit-orientation" content="landscape"/>
+    <title>Title</title>
+    <style>
+        .table1 {
+            font-family: sans-serif;
+            color: #444;
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #f2f5f7;
+            font-size: 15px;
+        }
+
+        .table1 tr th {
+            background: #35A9DB;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        .table1, th, td {
+            padding: 8px 20px;
+            text-align: center;
+        }
+
+        .table1, th, td.customer {
+            padding: 0px;
+            margin: -1px;
+            text-align: center;
+        }
+
+        .table1 tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .table1 tr.master {
+            background-color: #f2f2f2;
+        }
+
+        .table1 tr.branch {
+            background-color: #99ff66;
+        }
+
+        .table2 {
+            font-family: sans-serif;
+            color: #444;
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #f2f5f7;
+            font-size: 15px;
+        }
+
+        .table2 tr th {
+            background: #aed6f1;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        .table2, th, td {
+            padding: 8px 20px;
+            text-align: center;
+        }
+
+        .table2 tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .table3 {
+            font-family: sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            border: 0px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h2>{{ head_title }}</h2>
+</div>
+<div>
+    <table class="table1">
+        <thead>
+        {% if category == "sales" %}
+            <tr>
+                <th>TANGGAL</th>
+                <th>SALES REP</th>
+                <th>BRANCH</th>
+                <th>DIVISION</th>
+                <th>BREAK TIME (Minutes)</th>
+                <th>VISITED</th>
+                <th>VISIT TIME (Minutes)</th>
+                <th>DRIVING TIME (Minutes)</th>
+                <th>PLAN</th>
+                <th>NEW</th>
+                <th>ALERT</th>
+                <th>PERMISSION</th>
+                <th>CANCEL</th>
+                <th>INVOICE</th>
+            </tr>
+        {% else %}
+            <tr>
+                <th>TANGGAL</th>
+                <th>DRIVER</th>
+                <th>BRANCH</th>
+                <th>BREAK TIME (Minutes)</th>
+                <th>VISITED</th>
+                <th>VISIT TIME (Minutes)</th>
+                <th>DRIVING TIME (Minutes)</th>
+                <th>PLAN</th>
+                <th>ALERT</th>
+                <th>PERMISSION</th>
+                <th>CANCEL</th>
+                <th>PACKING SLIP</th>
+            </tr>
+        {% endif %}
+        </thead>
+        <tbody>
+        {% for rec in body_table %}
+            <tr class="master">
+                {% if category == "sales" %}
+                    <td>{{ rec.tanggal }}</td>
+                    <td>{{ rec.sales }}</td>
+                    <td>{{ rec.branch }}</td>
+                    <td>{{ rec.division }}</td>
+                    <td>{{ rec.break_time }}</td>
+                    <td>{{ rec.visited }}</td>
+                    <td>{{ rec.visit_time }}</td>
+                    <td>{{ rec.driving_time }}</td>
+                    <td>{{ rec.plan }}</td>
+                    <td>{{ rec.new }}</td>
+                    <td>{{ rec.alert }}</td>
+                    <td>{{ rec.permission }}</td>
+                    <td>{{ rec.cancel }}</td>
+                    <td>{{ rec.invoice }}</td>
+                {% else %}
+                    <td>{{ rec.tanggal }}</td>
+                    <td>{{ rec.driver }}</td>
+                    <td>{{ rec.branch }}</td>
+                    <td>{{ rec.break_time }}</td>
+                    <td>{{ rec.visited }}</td>
+                    <td>{{ rec.visit_time }}</td>
+                    <td>{{ rec.driving_time }}</td>
+                    <td>{{ rec.plan }}</td>
+                    <td>{{ rec.alert }}</td>
+                    <td>{{ rec.permission }}</td>
+                    <td>{{ rec.cancel }}</td>
+                    <td>{{ rec.invoice }}</td>
+                {% endif %}
+            </tr>
+            <tr class="branch">
+                {% if category == "sales" %}
+                    <td colspan="14">
+                        <table class="table3">
+                            <tbody>
+                            <tr>
+                                <td>START : {{ rec.start_branch.name }}</td>
+                                <td>{{ rec.start_branch.address }}</td>
+                                <td>TIME : {{ rec.start_branch.in }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                {% else %}
+                    <td colspan="12">
+                        <table class="table3">
+                            <tbody>
+                            <tr>
+                                <td>START : {{ rec.start_branch.name }}</td>
+                                <td>{{ rec.start_branch.address }}</td>
+                                <td>TIME : {{ rec.start_branch.in }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                {% endif %}
+            </tr>
+            {% if rec.customer %}
+                {% if category == "sales" %}
+                    <tr>
+                        <td class="customer" colspan="14">
+                            <table class="table2">
+                                <thead>
+                                <tr>
+                                    <th width="10%">Customer Code</th>
+                                    <th width="10%">Customer Name</th>
+                                    <th width="50%">Address</th>
+                                    <th width="10%">Check In</th>
+                                    <th width="10%">Check Out</th>
+                                    <th width="10%">Summary</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for cust in rec.customer %}
+                                    <tr>
+                                        <td>{{ cust.code }}</td>
+                                        <td>{{ cust.name }}</td>
+                                        <td>{{ cust.address }}</td>
+                                        <td>{{ cust.in }}</td>
+                                        <td>{{ cust.out }}</td>
+                                        <td>{{ cust.summary }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="customer" colspan="12">
+                            <table class="table2">
+                                <thead>
+                                <tr>
+                                    <th width="10%">Customer Code</th>
+                                    <th width="10%">Customer Name</th>
+                                    <th width="50%">Address</th>
+                                    <th width="10%">Check In</th>
+                                    <th width="10%">Check Out</th>
+                                    <th width="10%">Summary</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for cust in rec.customer %}
+                                    <tr>
+                                        <td>{{ cust.code }}</td>
+                                        <td>{{ cust.name }}</td>
+                                        <td>{{ cust.address }}</td>
+                                        <td>{{ cust.in }}</td>
+                                        <td>{{ cust.out }}</td>
+                                        <td>{{ cust.summary }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+            <tr class="branch">
+                {% if category == "sales" %}
+                    <td colspan="14">
+                        <table class="table3">
+                            <tbody>
+                            <tr>
+                                <td>END : {{ rec.end_branch.name }}</td>
+                                <td>{{ rec.end_branch.address }}</td>
+                                <td>TIME : {{ rec.end_branch.out }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                {% else %}
+                    <td colspan="12">
+                        <table class="table3">
+                            <tbody>
+                            <tr>
+                                <td>END : {{ rec.end_branch.name }}</td>
+                                <td>{{ rec.end_branch.address }}</td>
+                                <td>TIME : {{ rec.end_branch.out }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
